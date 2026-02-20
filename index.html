@@ -770,21 +770,29 @@
         });
 
         // Navegação
-        function nextStep(step) {
-            const section = document.querySelector(`[data-section="${step}"]`);
-            const inputs = section.querySelectorAll('input[required], select[required]');
-            let valid = true;
+       function nextStep(step) {
+    const section = document.querySelector(`[data-section="${step}"]`);
+    const inputs = section.querySelectorAll('input[required], select[required]');
+    let valid = true;
 
-            inputs.forEach(input => {
-                if (input.type === 'radio') {
-                    const group = section.querySelectorAll(`input[name="${input.name}"]`);
-                    if (!Array.from(group).some(r => r.checked)) valid = false;
-                } else if (!input.value) {
-                    valid = false;
-                    input.style.borderColor = 'var(--color-error)';
-                } else {
-                    input.style.borderColor = '';
-                }
+    inputs.forEach(input => {
+        if (input.type === 'radio') {
+            const group = section.querySelectorAll(`input[name="${input.name}"]`);
+            if (!Array.from(group).some(r => r.checked)) valid = false;
+        } else if (input.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!input.value || !emailRegex.test(input.value)) {
+                valid = false;
+                input.style.borderColor = 'var(--color-error)';
+            } else {
+                input.style.borderColor = '';
+            }
+        } else if (!input.value) {
+            valid = false;
+            input.style.borderColor = 'var(--color-error)';
+        } else {
+            input.style.borderColor = '';
+        }
             });
 
             if (!valid) {
